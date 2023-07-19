@@ -42,7 +42,11 @@ class Configuration() {
         truckOrderChannel: MessageChannel,
     ): StandardIntegrationFlow = integrationFlow(truckOrderChannel) {
         log()
-        handle {  }
+        handle<ToyType> { _, headers ->
+            println("Started making truck ${headers["correlationId"]}")
+            Thread.sleep(1000)
+            println("Finished making truck ${headers["correlationId"]}")
+        }
     }
 
     @Bean
