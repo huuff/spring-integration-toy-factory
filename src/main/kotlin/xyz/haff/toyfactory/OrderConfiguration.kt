@@ -8,14 +8,11 @@ import org.springframework.integration.dsl.integrationFlow
 import org.springframework.messaging.MessageChannel
 
 @Configuration
-class Configuration() {
+class OrderConfiguration {
 
 
-    @Bean
-    fun truckOrderChannel(): MessageChannel = DirectChannel()
 
-    @Bean
-    fun dollOrderChannel(): MessageChannel = DirectChannel()
+
 
     @Bean
     fun orderFlow(
@@ -34,27 +31,6 @@ class Configuration() {
                 ToyType.DOLL -> dollOrderChannel
             }
         }
-    }
-
-
-    @Bean
-    fun truckOrderFlow(
-        truckOrderChannel: MessageChannel,
-    ): StandardIntegrationFlow = integrationFlow(truckOrderChannel) {
-        log()
-        handle<ToyType> { _, headers ->
-            println("Started making truck ${headers["correlationId"]}")
-            Thread.sleep(1000)
-            println("Finished making truck ${headers["correlationId"]}")
-        }
-    }
-
-    @Bean
-    fun dollOrderFlow(
-        dollOrderChannel: MessageChannel,
-    ): StandardIntegrationFlow = integrationFlow(dollOrderChannel) {
-        log()
-        handle { }
     }
 
 }
