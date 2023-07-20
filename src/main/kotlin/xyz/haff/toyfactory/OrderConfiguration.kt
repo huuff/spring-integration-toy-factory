@@ -10,10 +10,6 @@ import org.springframework.messaging.MessageChannel
 @Configuration
 class OrderConfiguration {
 
-
-
-
-
     @Bean
     fun orderFlow(
         truckOrderChannel: MessageChannel,
@@ -24,6 +20,8 @@ class OrderConfiguration {
     )
     {
         log("order")
+        transform(::normalizeOrder)
+        log("normalized-order")
         split<Order> { order -> order.lines.flatMap { line -> List(line.amount) { line.type } } }
         route<ToyType> {
             when (it) {
